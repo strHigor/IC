@@ -1,14 +1,11 @@
 import wget
 import os
-import os.path
 import requests
 from bs4 import BeautifulSoup
-from zipfile import ZipFile
 from pathlib import Path
-from Utils.file_utils import FileUtils as Utils
+import Utils.utils as utils
 
 arquivos = []
-utils = Utils("Anexos.zip")
 
 def requisicao():
     try:
@@ -28,9 +25,9 @@ def requisicao():
         for arquivo in Path("./Anexos").glob("*.*"):
             arquivos.append(arquivo)
 
-        utils.arquivos_anexo = utils.listar_arquivos("./Anexos", "*.*")
-        utils.criar_rar()
-        utils.excluir_arquivos()
+        arquivos_anexo = utils.listar_arquivos("./Anexos", "*.*")
+        utils.criar_rar("Anexos.zip", arquivos_anexo)
+        utils.excluir_arquivos(arquivos_anexo)
         os.rmdir("./Anexos")
 
         return

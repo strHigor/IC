@@ -1,7 +1,9 @@
-from zipfile import ZipFile
 import os
-import os.path
-from Utils.file_utils import FileUtils as Utils
+import Utils.utils as utils
 
-utils = Utils("Anexos.zip")
-utils.excluir_arquivos()
+if os.path.isdir('./Anexos') == True:
+    arquivos_anexo = utils.listar_arquivos("./Anexos", "*.*")
+    utils.excluir_arquivos(arquivos_anexo)
+    os.rmdir("./Anexos")
+
+utils.extrair_rar("Anexos.zip")
