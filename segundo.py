@@ -1,5 +1,6 @@
 import os
 import Utils.utils as utils
+import camelot #pip3 install camelot-py[cv] tabula-py
 
 if os.path.isdir('./Anexos') == True:
     arquivos_anexo = utils.listar_arquivos("./Anexos", "*.*")
