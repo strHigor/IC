@@ -3,11 +3,7 @@ import os
 import tabula
 import csv
 
-if os.path.isdir("./Anexos") == True:
-    arquivos_anexo = utils.listar_arquivos("./Anexos", "*.*")
-    utils.excluir_arquivos(arquivos_anexo)
-    os.rmdir("./Anexos")
-
+utils.excluir_pasta_anexos("./Anexos", "*.*")
 utils.extrair_rar("Anexos.zip")
 
 arquivoPdf = "Anexos/Anexo_I_Rol_2021RN_465.2021_RN473_RN478_RN480_RN513_RN536_RN537_RN538_RN539_RN541_RN542_RN544_546.pdf"
@@ -38,4 +34,6 @@ arquivo_csv = open("Anexo_I.csv", "w+")
 arquivo_csv.write(conteudo)
 arquivo_csv.close()
 
-os.remove(os.path.join("Anexo_I_Original.csv"))
+utils.criar_rar("Teste_Higor_Nascimento.zip", "Anexo_I.csv")
+utils.excluir_arquivos(["Anexo_I_Original.csv", "Anexo_I.csv"])
+utils.excluir_pasta_anexos("./Anexos", "*.*")
