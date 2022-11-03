@@ -20,8 +20,7 @@ def requisicao():
         site = BeautifulSoup(conteudo.text, "html5lib")
 
         for x in range(14, 19):
-            link = site.select(
-                f"#parent-fieldname-text > p:nth-child({str(x)}) > a")[0].attrs["href"]
+            link = site.select(f"#parent-fieldname-text > p:nth-child({str(x)}) > a")[0].attrs["href"]
             wget.download(link, "./Anexos")
 
         for arquivo in Path("./Anexos").glob("*.*"):
