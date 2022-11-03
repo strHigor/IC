@@ -1,5 +1,4 @@
 import Utils.utils as utils
-import os
 import tabula
 import csv
 
