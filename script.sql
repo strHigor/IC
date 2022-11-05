@@ -1,8 +1,6 @@
 DROP DATABASE ANS;
-
 CREATE DATABASE ANS;
-
-USE TERCEIRO;
+USE ANS;
 
 CREATE TABLE operadoras(
     registro_ans INT,
@@ -35,7 +33,12 @@ CREATE TABLE despesas(
     valor_saldo_final DECIMAL(40, 2)
 );
 
-LOAD DATA INFILE 'C:/Users/higor/Desktop/IC/Anexos_Teste 3/Relatorio_cadop.csv' INTO TABLE operadoras CHARACTER SET latin1 FIELDS TERMINATED BY ';' ENCLOSED BY '"' LINES TERMINATED BY '\r\n' IGNORE 3 ROWS (
+LOAD DATA INFILE 'C:/Users/higor/Desktop/IC/Anexos_Teste 3/Relatorio_cadop.csv' INTO TABLE operadoras
+CHARACTER SET latin1
+FIELDS TERMINATED BY ';'
+ENCLOSED BY '"'
+LINES TERMINATED BY '\r\n'
+IGNORE 3 ROWS (
     registro_ans,
     cnpj,
     razao_social,
@@ -59,7 +62,12 @@ LOAD DATA INFILE 'C:/Users/higor/Desktop/IC/Anexos_Teste 3/Relatorio_cadop.csv' 
 SET
     data_registro_ans = STR_TO_DATE(@data_registro_ans, '%d/%m/%Y');
 
-LOAD DATA INFILE 'C:/Users/higor/Desktop/IC/Anexos_Teste 3/1T2021.csv' INTO TABLE despesas CHARACTER SET latin1 FIELDS TERMINATED BY ';' ENCLOSED BY '"' LINES TERMINATED BY '\r\n' IGNORE 1 ROWS (
+LOAD DATA INFILE 'C:/Users/higor/Desktop/IC/Anexos_Teste 3/1T2021.csv' INTO TABLE despesas
+CHARACTER SET latin1
+FIELDS TERMINATED BY ';'
+ENCLOSED BY '"'
+LINES TERMINATED BY '\r\n'
+IGNORE 1 ROWS (
     @data_despesa,
     registro_ans_id,
     codigo_conta_contabil,
@@ -70,7 +78,12 @@ SET
     data_despesa = STR_TO_DATE(@data_despesa, '%d/%m/%Y'),
     valor_saldo_final = REPLACE(@valor_saldo_final, ',', '.');
 
-LOAD DATA INFILE 'C:/Users/higor/Desktop/IC/Anexos_Teste 3/2T2021.csv' INTO TABLE despesas CHARACTER SET latin1 FIELDS TERMINATED BY ';' ENCLOSED BY '"' LINES TERMINATED BY '\r\n' IGNORE 1 ROWS (
+LOAD DATA INFILE 'C:/Users/higor/Desktop/IC/Anexos_Teste 3/2T2021.csv' INTO TABLE despesas
+CHARACTER SET latin1
+FIELDS TERMINATED BY ';'
+ENCLOSED BY '"'
+LINES TERMINATED BY '\r\n'
+IGNORE 1 ROWS (
     @data_despesa,
     registro_ans_id,
     codigo_conta_contabil,
@@ -81,7 +94,12 @@ SET
     data_despesa = STR_TO_DATE(@data_despesa, '%d/%m/%Y'),
     valor_saldo_final = REPLACE(@valor_saldo_final, ',', '.');
 
-LOAD DATA INFILE 'C:/Users/higor/Desktop/IC/Anexos_Teste 3/3T2021.csv' INTO TABLE despesas CHARACTER SET latin1 FIELDS TERMINATED BY ';' ENCLOSED BY '"' LINES TERMINATED BY '\r\n' IGNORE 1 ROWS (
+LOAD DATA INFILE 'C:/Users/higor/Desktop/IC/Anexos_Teste 3/3T2021.csv' INTO TABLE despesas
+CHARACTER SET latin1
+FIELDS TERMINATED BY ';'
+ENCLOSED BY '"'
+LINES TERMINATED BY '\r\n'
+IGNORE 1 ROWS (
     @data_despesa,
     registro_ans_id,
     codigo_conta_contabil,
@@ -92,7 +110,12 @@ SET
     data_despesa = STR_TO_DATE(@data_despesa, '%d/%m/%Y'),
     valor_saldo_final = REPLACE(@valor_saldo_final, ',', '.');
 
-LOAD DATA INFILE 'C:/Users/higor/Desktop/IC/Anexos_Teste 3/4T2021.csv' INTO TABLE despesas CHARACTER SET latin1 FIELDS TERMINATED BY ';' ENCLOSED BY '"' LINES TERMINATED BY '\r\n' IGNORE 1 ROWS (
+LOAD DATA INFILE 'C:/Users/higor/Desktop/IC/Anexos_Teste 3/4T2021.csv' INTO TABLE despesas
+CHARACTER SET latin1
+FIELDS TERMINATED BY ';'
+ENCLOSED BY '"'
+LINES TERMINATED BY '\r\n'
+IGNORE 1 ROWS (
     data_despesa,
     registro_ans_id,
     codigo_conta_contabil,
@@ -104,7 +127,12 @@ SET
     valor_saldo_inicial = REPLACE(@valor_saldo_inicial, ',', '.'),
     valor_saldo_final = REPLACE(@valor_saldo_final, ',', '.');
 
-LOAD DATA INFILE 'C:/Users/higor/Desktop/IC/Anexos_Teste 3/1T2022.csv' INTO TABLE despesas CHARACTER SET latin1 FIELDS TERMINATED BY ';' ENCLOSED BY '"' LINES TERMINATED BY '\r\n' IGNORE 1 ROWS (
+LOAD DATA INFILE 'C:/Users/higor/Desktop/IC/Anexos_Teste 3/1T2022.csv' INTO TABLE despesas
+CHARACTER SET latin1
+FIELDS TERMINATED BY ';'
+ENCLOSED BY '"'
+LINES TERMINATED BY '\r\n'
+IGNORE 1 ROWS (
     data_despesa,
     registro_ans_id,
     codigo_conta_contabil,
@@ -116,7 +144,12 @@ SET
     valor_saldo_inicial = REPLACE(@valor_saldo_inicial, ',', '.'),
     valor_saldo_final = REPLACE(@valor_saldo_final, ',', '.');
 
-LOAD DATA INFILE 'C:/Users/higor/Desktop/IC/Anexos_Teste 3/2T2022.csv' INTO TABLE despesas CHARACTER SET latin1 FIELDS TERMINATED BY ';' ENCLOSED BY '"' LINES TERMINATED BY '\r\n' IGNORE 1 ROWS (
+LOAD DATA INFILE 'C:/Users/higor/Desktop/IC/Anexos_Teste 3/2T2022.csv' INTO TABLE despesas
+CHARACTER SET latin1
+FIELDS TERMINATED BY ';'
+ENCLOSED BY '"'
+LINES TERMINATED BY '\r\n'
+IGNORE 1 ROWS (
     @data_despesa,
     registro_ans_id,
     codigo_conta_contabil,
@@ -128,3 +161,31 @@ SET
     data_despesa = STR_TO_DATE(@data_despesa, '%d/%m/%Y'),
     valor_saldo_inicial = REPLACE(@valor_saldo_inicial, ',', '.'),
     valor_saldo_final = REPLACE(@valor_saldo_final, ',', '.');
+
+CREATE OR REPLACE VIEW Operadoras_Maiores_Despesas_Ultimo_Trimestre AS
+SELECT
+    op.razao_social AS 'Operadora',
+    Sum(des.valor_saldo_final) - Sum(des.valor_saldo_inicial) AS 'Despesa'
+FROM despesas des
+    JOIN operadoras op 
+		ON des.registro_ans_id = op.registro_ans
+WHERE
+    des.descricao = 'EVENTOS/ SINISTROS CONHECIDOS OU AVISADOS  DE ASSISTÊNCIA A SAÚDE MEDICO HOSPITALAR'
+    AND des.data_despesa BETWEEN '2022/03/01' AND '2022/06/31'
+GROUP BY op.razao_social
+ORDER BY Sum(des.valor_saldo_final) - Sum(des.valor_saldo_inicial) DESC
+LIMIT 10;
+
+CREATE OR REPLACE VIEW Operadoras_Maiores_Despesas_Ultimo_Ano AS
+SELECT
+    op.razao_social AS 'Operadora',
+    Sum(des.valor_saldo_final) - Sum(des.valor_saldo_inicial) AS 'Despesa'
+FROM despesas des
+    JOIN operadoras op 
+		ON des.registro_ans_id = op.registro_ans
+WHERE
+    des.descricao = 'EVENTOS/ SINISTROS CONHECIDOS OU AVISADOS  DE ASSISTÊNCIA A SAÚDE MEDICO HOSPITALAR'
+    AND des.data_despesa BETWEEN DATE(SUBDATE(CURDATE(), INTERVAL 1 YEAR)) AND CURDATE()
+GROUP BY op.razao_social
+ORDER BY Sum(des.valor_saldo_final) - Sum(des.valor_saldo_inicial) DESC
+LIMIT 10;
