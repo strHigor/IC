@@ -72,11 +72,13 @@ IGNORE 1 ROWS (
     registro_ans_id,
     codigo_conta_contabil,
     descricao,
+    @valor_saldo_inicial,
     @valor_saldo_final
 )
 SET
-    data_despesa = STR_TO_DATE(@data_despesa, '%d/%m/%Y'),
-    valor_saldo_final = REPLACE(@valor_saldo_final, ',', '.');
+    valor_saldo_inicial = IFNULL(REPLACE(@valor_saldo_inicial, ',', '.'), 0.00),
+    valor_saldo_final = IFNULL(REPLACE(@valor_saldo_final, ',', '.'), 0.00),
+    data_despesa = STR_TO_DATE(@data_despesa, '%d/%m/%Y');
 
 LOAD DATA INFILE 'C:/Users/higor/Desktop/IC/Anexos_Teste 3/2T2021.csv' INTO TABLE despesas
 CHARACTER SET latin1
@@ -88,11 +90,13 @@ IGNORE 1 ROWS (
     registro_ans_id,
     codigo_conta_contabil,
     descricao,
+    @valor_saldo_inicial,
     @valor_saldo_final
 )
 SET
-    data_despesa = STR_TO_DATE(@data_despesa, '%d/%m/%Y'),
-    valor_saldo_final = REPLACE(@valor_saldo_final, ',', '.');
+    valor_saldo_inicial = IFNULL(REPLACE(@valor_saldo_inicial, ',', '.'), 0),
+    valor_saldo_final = IFNULL(REPLACE(@valor_saldo_final, ',', '.'), 0),
+    data_despesa = STR_TO_DATE(@data_despesa, '%d/%m/%Y');
 
 LOAD DATA INFILE 'C:/Users/higor/Desktop/IC/Anexos_Teste 3/3T2021.csv' INTO TABLE despesas
 CHARACTER SET latin1
@@ -104,11 +108,13 @@ IGNORE 1 ROWS (
     registro_ans_id,
     codigo_conta_contabil,
     descricao,
+    @valor_saldo_inicial,
     @valor_saldo_final
 )
 SET
-    data_despesa = STR_TO_DATE(@data_despesa, '%d/%m/%Y'),
-    valor_saldo_final = REPLACE(@valor_saldo_final, ',', '.');
+    valor_saldo_inicial = IFNULL(REPLACE(@valor_saldo_inicial, ',', '.'), 0),
+    valor_saldo_final = IFNULL(REPLACE(@valor_saldo_final, ',', '.'), 0),
+    data_despesa = STR_TO_DATE(@data_despesa, '%d/%m/%Y');
 
 LOAD DATA INFILE 'C:/Users/higor/Desktop/IC/Anexos_Teste 3/4T2021.csv' INTO TABLE despesas
 CHARACTER SET latin1
@@ -124,8 +130,9 @@ IGNORE 1 ROWS (
     @valor_saldo_final
 )
 SET
-    valor_saldo_inicial = REPLACE(@valor_saldo_inicial, ',', '.'),
-    valor_saldo_final = REPLACE(@valor_saldo_final, ',', '.');
+    valor_saldo_inicial = IFNULL(REPLACE(@valor_saldo_inicial, ',', '.'), 0),
+    valor_saldo_final = IFNULL(REPLACE(@valor_saldo_final, ',', '.'), 0),
+    data_despesa = STR_TO_DATE(@data_despesa, '%d/%m/%Y');
 
 LOAD DATA INFILE 'C:/Users/higor/Desktop/IC/Anexos_Teste 3/1T2022.csv' INTO TABLE despesas
 CHARACTER SET latin1
@@ -141,8 +148,9 @@ IGNORE 1 ROWS (
     @valor_saldo_final
 )
 SET
-    valor_saldo_inicial = REPLACE(@valor_saldo_inicial, ',', '.'),
-    valor_saldo_final = REPLACE(@valor_saldo_final, ',', '.');
+    valor_saldo_inicial = IFNULL(REPLACE(@valor_saldo_inicial, ',', '.'), 0),
+    valor_saldo_final = IFNULL(REPLACE(@valor_saldo_final, ',', '.'), 0),
+    data_despesa = STR_TO_DATE(@data_despesa, '%d/%m/%Y');
 
 LOAD DATA INFILE 'C:/Users/higor/Desktop/IC/Anexos_Teste 3/2T2022.csv' INTO TABLE despesas
 CHARACTER SET latin1
@@ -158,14 +166,15 @@ IGNORE 1 ROWS (
     @valor_saldo_final
 )
 SET
-    data_despesa = STR_TO_DATE(@data_despesa, '%d/%m/%Y'),
-    valor_saldo_inicial = REPLACE(@valor_saldo_inicial, ',', '.'),
-    valor_saldo_final = REPLACE(@valor_saldo_final, ',', '.');
+    valor_saldo_inicial = IFNULL(REPLACE(@valor_saldo_inicial, ',', '.'), 0),
+    valor_saldo_final = IFNULL(REPLACE(@valor_saldo_final, ',', '.'), 0),
+    data_despesa = STR_TO_DATE(@data_despesa, '%d/%m/%Y');
 
 CREATE OR REPLACE VIEW Operadoras_Maiores_Despesas_Ultimo_Trimestre AS
 SELECT
     op.razao_social AS 'Operadora',
-    Sum(des.valor_saldo_final) - Sum(des.valor_saldo_inicial) AS 'Despesa'
+    Sum(des.valor_saldo_final) - Sum(des.valor_saldo_inicial) AS 'Despesa',
+    count(codigo_conta_contabil) as Ocorrencias
 FROM despesas des
     JOIN operadoras op 
 		ON des.registro_ans_id = op.registro_ans
@@ -173,19 +182,20 @@ WHERE
     des.descricao = 'EVENTOS/ SINISTROS CONHECIDOS OU AVISADOS  DE ASSISTÊNCIA A SAÚDE MEDICO HOSPITALAR'
     AND des.data_despesa BETWEEN '2022/03/01' AND '2022/06/31'
 GROUP BY op.razao_social
-ORDER BY Sum(des.valor_saldo_final) - Sum(des.valor_saldo_inicial) DESC
+ORDER BY Sum(des.valor_saldo_final) DESC, Sum(des.valor_saldo_inicial) DESC
 LIMIT 10;
 
 CREATE OR REPLACE VIEW Operadoras_Maiores_Despesas_Ultimo_Ano AS
 SELECT
     op.razao_social AS 'Operadora',
-    Sum(des.valor_saldo_final) - Sum(des.valor_saldo_inicial) AS 'Despesa'
+    Sum(des.valor_saldo_final) - Sum(des.valor_saldo_inicial) AS 'Despesa',
+    count(codigo_conta_contabil) as Ocorrencias
 FROM despesas des
     JOIN operadoras op 
 		ON des.registro_ans_id = op.registro_ans
 WHERE
     des.descricao = 'EVENTOS/ SINISTROS CONHECIDOS OU AVISADOS  DE ASSISTÊNCIA A SAÚDE MEDICO HOSPITALAR'
-    AND des.data_despesa BETWEEN DATE(SUBDATE(CURDATE(), INTERVAL 1 YEAR)) AND CURDATE()
+    AND des.data_despesa BETWEEN '2021-01-01' AND '2021-12-31'
 GROUP BY op.razao_social
-ORDER BY Sum(des.valor_saldo_final) - Sum(des.valor_saldo_inicial) DESC
+ORDER BY Sum(des.valor_saldo_final) DESC, Sum(des.valor_saldo_inicial) DESC
 LIMIT 10;

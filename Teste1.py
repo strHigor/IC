@@ -19,19 +19,21 @@ def requisicao():
 
         site = BeautifulSoup(conteudo.text, "html5lib")
 
+        print("Iniciando o download dos arquivos, por favor aguarde.")
         for x in range(14, 19):
             link = site.select(f"#parent-fieldname-text > p:nth-child({str(x)}) > a")[0].attrs["href"]
             wget.download(link, "./Anexos")
 
         for arquivo in Path("./Anexos").glob("*.*"):
             arquivos.append(arquivo)
+        print("\nOs arquivos foram baixados e salvos no diretório ./Anexos")
 
         arquivos_anexo = utils.listar_arquivos("./Anexos", "*.*")
         utils.criar_rar("Anexos.zip", arquivos_anexo)
         utils.excluir_arquivos(arquivos_anexo)
         os.rmdir("./Anexos")
 
-        return
+        return print("\nTeste 1 finalizado com sucesso.")
     except Exception as erro:
         print(str(erro))
 
