@@ -48,11 +48,12 @@ export default {
 </script>
 
 <template>
-  <div id="app">
-    <div id="inputs">
-      <label for="buscar"></label>
-      <input type="text" minlength="3" id="buscar" name="buscar" v-model="input" placeholder="Buscar Operadora">
-      <input v-on:click="procurar(this.input)" type="submit" class="btn" value="Procurar">
+  <div id="app" class="app">
+    <div class="busca">
+      <input type="text" class="buscaTexto" v-model="input" placeholder="Buscar por operadora" minlength="3">
+      <button type="submit" v-on:click="procurar(this.input)" class="buscaBtn">
+        <i class="fa fa-search"></i>
+      </button>
     </div>
 
     <!-- cria a tabela com os valores -->
