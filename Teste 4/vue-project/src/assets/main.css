@@ -3,7 +3,6 @@ body {
 }
 
 table {
-  margin-top: 50px;
   font-family: Arial, Helvetica, sans-serif;
   font-size: 11px;
   border-collapse: collapse;
@@ -33,7 +32,6 @@ table tr:hover {
 table th {
   padding-top: 12px;
   padding-bottom: 12px;
-  text-align: left;
   background-color: gainsboro;
   text-align: center;
   color: white;
@@ -41,19 +39,45 @@ table th {
   border-radius: 8px;
 }
 
+.qtdRegistros{
+  font-weight: bold;
+  font-size: 13px;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  padding-left: 3px;
+  border: solid 1px;
+  border-radius: 4px;
+  background-color:aliceblue;
+  width: auto;
+  height: 18px;
+  text-align: center;
+  position: relative;
+  top: 5px;
+  
+}
+
+.titulo {
+  font-weight: bold;
+  font-size: 30px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  position: relative;
+  top: -30px;
+  left: 150px;
+}
+
 .app {
-  width: 500px;
+  width: 100%;
   margin-left: 2px;
+  position: relative;
 }
 
 .busca {
   width: 100%;
-  position: relative;
+  height: 40px;
   display: flex;
 }
 
 .buscaTexto {
-  width: 100%;
+  width: 360px;
   border: 3px solid #13293D;
   border-right: none;
   padding: 5px;

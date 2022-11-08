@@ -1,4 +1,3 @@
-DROP DATABASE ANS;
 CREATE DATABASE ANS;
 USE ANS;
 
@@ -188,7 +187,7 @@ LIMIT 10;
 CREATE OR REPLACE VIEW Operadoras_Maiores_Despesas_Ultimo_Ano AS
 SELECT
     op.razao_social AS 'Operadora',
-    Sum(des.valor_saldo_final) - Sum(des.valor_saldo_inicial) AS 'Despesa',
+    IF(des.valor_saldo_inicial < 0, ABS(des.valor_saldo_inicial), des.valor_saldo_inicial - des.valor_saldo_final) AS 'Despesa',
     count(codigo_conta_contabil) as Ocorrencias
 FROM despesas des
     JOIN operadoras op 
@@ -197,5 +196,8 @@ WHERE
     des.descricao = 'EVENTOS/ SINISTROS CONHECIDOS OU AVISADOS  DE ASSISTÊNCIA A SAÚDE MEDICO HOSPITALAR'
     AND des.data_despesa BETWEEN '2021-01-01' AND '2021-12-31'
 GROUP BY op.razao_social
-ORDER BY Sum(des.valor_saldo_final) DESC, Sum(des.valor_saldo_inicial) DESC
+ORDER BY Sum(des.valor_saldo_inicial) DESC, Sum(des.valor_saldo_final) DESC
 LIMIT 10;
+
+select * from Operadoras_Maiores_Despesas_Ultimo_Ano;
+select * from Operadoras_Maiores_Despesas_Ultimo_Trimestre;

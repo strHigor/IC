@@ -28,7 +28,8 @@ export default {
         }
       ],
       displayTable: "display",
-      input: null
+      input: null,
+      qtdReg: 0
     }
   },
   methods: {
@@ -37,6 +38,9 @@ export default {
         Buscas.listar(value).then(resposta => {
           if (resposta.status == 200) {
             this.dados = resposta.data
+            console.log(resposta.data.length)
+            this.input = ""
+            this.qtdReg = resposta.data.length
           }
         })
       } else {
@@ -54,8 +58,10 @@ export default {
       <button type="submit" v-on:click="procurar(this.input)" class="buscaBtn">
         <i class="fa fa-search"></i>
       </button>
-    </div>
+      <p class="titulo"> Relação de Operadoras Ativas ANS </p>
 
+    </div>
+    <P class="qtdRegistros" v-model="qtdReg"> Registros Encontrados: {{qtdReg}}</P>
     <!-- cria a tabela com os valores -->
     <div :style="{ display: displayTable }">
       <table>
