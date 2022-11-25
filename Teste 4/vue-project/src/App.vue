@@ -38,7 +38,6 @@ export default {
         Buscas.listar(value).then(resposta => {
           if (resposta.status == 200) {
             this.dados = resposta.data
-            console.log(resposta.data.length)
             this.input = ""
             this.qtdReg = resposta.data.length
           }

@@ -9,7 +9,6 @@ def convert_csv_to_list(csv_file_path: str) -> list:
             next(reader)
         headers = next(reader)
         headers = list(map(parse_string, headers))
-        print(headers)
         dict_reader = csv.DictReader(
             file, fieldnames=headers, skipinitialspace=True, delimiter=";")
         return list(dict_reader)

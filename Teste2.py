@@ -10,7 +10,6 @@ print("\nIniciando a conversão do arquivo PDF para CSV.")
 tabula.convert_into(arquivoPdf, "Anexo_I_Original.csv", output_format="csv", pages="3-180", lattice=True)
 print("A conversão foi um sucesso.")
 
-
 conteudo = ""
 cabecalho_parte1 = ""
 cabecalho_parte2 = ""

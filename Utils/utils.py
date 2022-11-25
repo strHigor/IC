@@ -24,9 +24,12 @@ def excluir_pasta_anexos(caminho, arquivo_extensao):
         print(f"\nUtils - Iniciando a exclusão da pasta {caminho}.")
         arquivos_anexo = listar_arquivos(caminho, arquivo_extensao)
         excluir_arquivos(arquivos_anexo)
-        os.rmdir(caminho)
+        os.rmdir(caminho)        
+        print(f"Utils - {caminho} excluido com sucesso.")
+    
+    else:
+        print("Caminho não existente.")
 
-    print(f"Utils - {caminho} excluido com sucesso.")
 
 
 def criar_rar(arquivo_rar, arquivo_anexo):
